@@ -266,8 +266,15 @@ describe Remy do
         before do
           Remy.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), 'fixtures/hello_world_chef.yml') }
         end
+
         it 'should return the ip address in the yml file if no ip address is given and an ip is present in the yml files' do
           Remy.send(:determine_ip_addresses_for_remy_run, '').should == ['50.57.162.242']
+        end
+
+        it 'should handle receiving no parameters' do
+          expect do
+            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == ['50.57.162.242']
+          end.to_not raise_error
         end
       end
 
@@ -282,6 +289,12 @@ describe Remy do
 
         it 'should return the ip address if an ip address is given and no top-level ip address is in the yml files' do
           Remy.send(:determine_ip_addresses_for_remy_run, '1.2.3.4').should == ['1.2.3.4']
+        end
+
+        it 'should handle receiving no parameters' do
+          expect do
+            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == []
+          end.to_not raise_error
         end
       end
 

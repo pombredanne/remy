@@ -109,7 +109,7 @@ module Remy
           ip_addresses = [options_hash[:ip_address]]
         end
       else
-        names_or_ip_addresses = rake_args.split(' ').collect {|name| name.strip }
+        names_or_ip_addresses = rake_args.present? ? rake_args.split(' ').collect {|name| name.strip } : []
         names_or_ip_addresses.each do |name_or_ip_address|
           # From: http://www.regular-expressions.info/examples.html
           ip_address_regex = '\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
