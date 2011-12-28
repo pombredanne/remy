@@ -48,7 +48,7 @@ module Remy
         begin
           configuration.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
         rescue SystemCallError, IOError
-          warn "WARN: #{filename} could not be found!"
+          # do nothing if the chef.yml file could not be read (it's not needed for every usage of remy, just certain ones)
         end
       end
     end
