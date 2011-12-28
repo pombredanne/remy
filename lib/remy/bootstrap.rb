@@ -35,13 +35,22 @@ module Remy
 
     def install_rvm
       remote_execute rvm_multi_user_install
+      add_root_user_to_rvm_group
       apt_get_rvm_packages
-      remote_execute "/usr/local/rvm/bin/rvm install #{ruby_version}"
-      remote_execute "/usr/local/rvm/bin/rvm #{ruby_version} --default"
+      remote_execute "#{source_rvm_sh} && rvm install #{ruby_version}"
+      remote_execute "#{source_rvm_sh} && rvm use #{ruby_version} --default"
     end
 
     def rvm_multi_user_install
       'curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer -o rvm-installer ; chmod +x rvm-installer ; sudo -s ./rvm-installer --version latest'
+    end
+
+    def source_rvm_sh
+      "source /etc/profile.d/rvm.sh"
+    end
+
+    def add_root_user_to_rvm_group
+      remote_execute "usermod -a -G rvm root"
     end
 
     def is_ssh_copy_id_installed_locally?
@@ -68,7 +77,7 @@ module Remy
         raise ArgumentError.new unless version.match(/^\d[.\d]+\d/)
         version_info = "-v #{version}"
       end
-      remote_execute "/usr/local/rvm/bin/gem install #{gem_name} #{version_info} --no-rdoc --no-ri"
+      remote_execute "#{source_rvm_sh} && gem install #{gem_name} #{version_info} --no-rdoc --no-ri"
     end
 
     def remote_apt_get(package_name)
