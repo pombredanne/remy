@@ -268,12 +268,12 @@ describe Remy do
         end
 
         it 'should return the ip address in the yml file if no ip address is given and an ip is present in the yml files' do
-          Remy.send(:determine_ip_addresses_for_remy_run, '').should == ['50.57.162.242']
+          Remy.send(:determine_ip_addresses_for_remy_run, '').should == ['108.166.98.115']
         end
 
         it 'should handle receiving no parameters' do
           expect do
-            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == ['50.57.162.242']
+            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == ['108.166.98.115']
           end.to_not raise_error
         end
       end
@@ -332,7 +332,7 @@ describe Remy do
         end
 
         it 'should be able to find all of the servers from the yml files that match certain attributes' do
-          Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo').should == ['50.57.162.242', '52.52.52.52']
+          Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo').should == ['108.166.98.115', '52.52.52.52']
           Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo color:green').should == ['52.52.52.52']
           Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo color:yellow').should == []
         end
