@@ -29,6 +29,24 @@ describe Remy do
       end
     end
 
+    describe 'json config files' do
+      it 'should combine multiple json files into a mash' do
+        Remy.configure { |config| config.json_files = ['fixtures/foo.json', 'fixtures/bar.json'].map { |f| File.join(File.dirname(__FILE__), f) } }
+        subject.configuration.json_files.should == ['fixtures/foo.json', 'fixtures/bar.json'].map { |f| File.join(File.dirname(__FILE__), f) }
+        subject.configuration.blah.should == 'bar'  # From foo.json
+        subject.configuration.baz.should == 'baz'   # From bar.json
+        subject.configuration.colors.to_hash.symbolize_keys.should == {:blue => 'blue', :green => 'green', :red => 'red'}
+      end
+
+      it 'should return an empty array if there are no json files' do
+        Remy.configure {}
+        subject.configuration.json_files.should == []
+      end
+
+      it 'should have the values in the json files override the values from the json files' do
+      end
+    end
+
     describe "cookbooks path" do
       it "should work if a single cookbook path is specified" do
         Remy.configure { |config| config.cookbook_path = 'cookbooks' }
