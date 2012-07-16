@@ -10,7 +10,7 @@ rails_env: bogus_and_should_be_overridden_by_value_in_servers_section
 servers:
   web.sharespost.com:
     <<: *APP
-    ip_address: <%= IP_ADDRESS %>
+    ip_address: <%= IP_ADDRESS_OF_REMY_TEST %>
     rails_env: demo
     color: blue
 
@@ -38,7 +38,7 @@ cloud_configuration:
 bootstrap:
   ruby_version: 1.9.2
   gems:
-    bundler: 1.0.21
-    chef: 0.10.4
-    rspec: 2.7.0
+    bundler: 3.0.0
+    chef: 10.12.0
+    rspec: 2.11.0
 

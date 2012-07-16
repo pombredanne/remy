@@ -9,7 +9,7 @@ describe Remy::Chef do
     it 'should use the top-level IP address in the yml files, if one is present, and an ip address is not passed in as an argument' do
       Remy.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
       chef = Remy::Chef.new
-      node_configuration(chef).ip_address.should == IP_ADDRESS
+      node_configuration(chef).ip_address.should == IP_ADDRESS_OF_REMY_TEST
       node_configuration(chef).color.should == 'blue'
       node_configuration(chef).recipes.should == ['recipe[hello_world]']
     end
@@ -68,14 +68,14 @@ describe Remy::Chef do
     end
 
     it 'should work with a hash as its argument' do
-      chef = Remy::Chef.new(:ip_address => IP_ADDRESS)
-      node_configuration(chef).ip_address.should == IP_ADDRESS
+      chef = Remy::Chef.new(:ip_address => IP_ADDRESS_OF_REMY_TEST)
+      node_configuration(chef).ip_address.should == IP_ADDRESS_OF_REMY_TEST
       node_configuration(chef).recipes.should == ['recipe[hello_world]']
     end
 
     it 'should work with JSON as its argument' do
-      chef = Remy::Chef.new("{\"ip_address\":\"#{IP_ADDRESS}\"}")
-      node_configuration(chef).ip_address.should == IP_ADDRESS
+      chef = Remy::Chef.new("{\"ip_address\":\"#{IP_ADDRESS_OF_REMY_TEST}\"}")
+      node_configuration(chef).ip_address.should == IP_ADDRESS_OF_REMY_TEST
       node_configuration(chef).recipes.should == ['recipe[hello_world]']
     end
   end

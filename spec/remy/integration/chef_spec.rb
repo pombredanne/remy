@@ -27,13 +27,13 @@ describe Remy::Chef do
     end
 
     it 'should work with a hash as its argument' do
-      run_chef(:ip_address => IP_ADDRESS) do |chef|
+      run_chef(:ip_address => IP_ADDRESS_OF_REMY_TEST) do |chef|
         verify_contents_of_hello_world(chef)
       end
     end
 
     it 'should work with JSON as its argument' do
-      run_chef("{\"ip_address\":\"#{IP_ADDRESS}\"}") do |chef|
+      run_chef("{\"ip_address\":\"#{IP_ADDRESS_OF_REMY_TEST}\"}") do |chef|
         verify_contents_of_hello_world(chef)
       end
     end

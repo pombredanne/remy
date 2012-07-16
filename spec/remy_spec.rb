@@ -161,7 +161,7 @@ describe Remy do
 
     describe '.find_server_config' do
       it 'should return the first server that matchs the criteria' do
-        Remy.find_server_config(:rails_env => 'demo').to_hash.should == {"color"=>"blue", "recipes"=>["recipe[hello_world]"], "rails_env"=>"demo", "ip_address"=> IP_ADDRESS}
+        Remy.find_server_config(:rails_env => 'demo').to_hash.should == {"color"=>"blue", "recipes"=>["recipe[hello_world]"], "rails_env"=>"demo", "ip_address"=> IP_ADDRESS_OF_REMY_TEST}
       end
 
       it 'should return nil if no server info is found' do
@@ -227,9 +227,9 @@ describe Remy do
         Remy.bootstrap.should == Hashie::Mash.new(
           :ruby_version => '1.9.2',
           :gems => {
-              :chef => '0.10.4',
-              :rspec => '2.7.0',
-              :bundler => '1.0.21'
+              :chef => '10.12.0',
+              :rspec => '2.11.0',
+              :bundler => '3.0.0'
           })
       end
 
@@ -268,12 +268,12 @@ describe Remy do
         end
 
         it 'should return the ip address in the yml file if no ip address is given and an ip is present in the yml files' do
-          Remy.send(:determine_ip_addresses_for_remy_run, '').should == ['108.166.98.115']
+          Remy.send(:determine_ip_addresses_for_remy_run, '').should == [IP_ADDRESS_OF_REMY_TEST]
         end
 
         it 'should handle receiving no parameters' do
           expect do
-            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == ['108.166.98.115']
+            Remy.send(:determine_ip_addresses_for_remy_run, nil).should == [IP_ADDRESS_OF_REMY_TEST]
           end.to_not raise_error
         end
       end
@@ -332,7 +332,7 @@ describe Remy do
         end
 
         it 'should be able to find all of the servers from the yml files that match certain attributes' do
-          Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo').should == ['108.166.98.115', '52.52.52.52']
+          Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo').should == [IP_ADDRESS_OF_REMY_TEST, '52.52.52.52']
           Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo color:green').should == ['52.52.52.52']
           Remy.send(:determine_ip_addresses_for_remy_run, 'rails_env:demo color:yellow').should == []
         end

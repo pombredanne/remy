@@ -45,9 +45,9 @@ describe Remy::Bootstrap do
     it 'should get gem version if it has been specified in the yml files' do
       Remy.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
       bootstrap = Remy::Bootstrap.new
-      gem(bootstrap)[:chef].should == '0.10.4'
-      gem(bootstrap)[:bundler].should == '1.0.21'
-      gem(bootstrap)[:rspec].should == '2.7.0'
+      gem(bootstrap)[:chef].should == '10.12.0'
+      gem(bootstrap)[:bundler].should == '3.0.0'
+      gem(bootstrap)[:rspec].should == '2.11.0'
     end
   end
 

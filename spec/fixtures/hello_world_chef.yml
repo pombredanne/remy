@@ -1,4 +1,4 @@
-ip_address: <%= IP_ADDRESS %>
+ip_address: <%= IP_ADDRESS_OF_REMY_TEST %>
 color: blue
 recipes:
   - recipe[hello_world]
