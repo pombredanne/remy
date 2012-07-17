@@ -38,14 +38,15 @@ module Remy
     def configure
       @config_instance = Configuration.new
       yield @config_instance
-      @configuration = Hashie::Mash.new({:yml_files => [@config_instance.yml_files].compact.flatten,
+      yml_files = [@config_instance.yml_files].compact.flatten
+      @configuration = Hashie::Mash.new({:yml_files => yml_files,
                                          :json_files => [@config_instance.json_files].compact.flatten,
                                          :remote_chef_dir => (@config_instance.remote_chef_dir || '/var/chef'),
                                          :roles_path => [@config_instance.roles_path].compact.flatten,
                                          :spec_path => [@config_instance.spec_path].compact.flatten,
                                          :cookbook_path => [@config_instance.cookbook_path].compact.flatten}.merge!(@config_instance.node_attributes))
 
-      @config_instance.yml_files.each do |filename|
+      yml_files.each do |filename|
         begin
           configuration.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
         rescue SystemCallError, IOError
