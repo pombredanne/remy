@@ -3,6 +3,7 @@ module Remy
     # For chef-solo info, see: http://wiki.opscode.com/display/chef/Chef+Solo
     include ::Remy::Shell
     include FileUtils
+    include ::Remy::Utility
     attr_reader :ip_address
 
     def initialize(options = {})
@@ -66,13 +67,8 @@ module Remy
     end
 
     def copy_spec_cookbook_and_role_dirs_to_tmp_dir
-      [@node_configuration.roles_path, @node_configuration.cookbook_path, @node_configuration.spec_path].each do |path|
-        if path
-          full_path = path.map{|p| File.expand_path(p) }
-          full_path.each do |a_path|
-            cp_r a_path, tmp_dir
-          end
-        end
+      flatten_paths(@node_configuration.roles_path, @node_configuration.cookbook_path, @node_configuration.spec_path).each do |a_path|
+        cp_r a_path, tmp_dir
       end
     end
 

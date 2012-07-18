@@ -40,9 +40,10 @@ require 'json'
 require 'hashie'
 require 'tmpdir'
 require 'remy/shell'
+require 'remy/utility'
 require 'yaml'
 dir = File.dirname(__FILE__)
-Dir[File.join(File.dirname(__FILE__), 'remy', '**', '*.rb')].each {|f| require f.gsub(dir, '')[1, f.length] }
+Dir[File.join(dir, 'remy', '**', '*.rb')].each {|f| require f.gsub(dir, '')[1, f.length] }
 
 module Remy
   begin
