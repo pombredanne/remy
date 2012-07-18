@@ -23,7 +23,7 @@
 
 module Remy
   class Configuration
-    attr_accessor :yml_files, :json_files, :cookbook_path, :spec_path, :remote_chef_dir, :node_attributes, :roles_path
+    attr_accessor :yml_files, :cookbook_path, :spec_path, :remote_chef_dir, :node_attributes, :roles_path
 
     def initialize
       @yml_files = []
@@ -40,7 +40,6 @@ module Remy
       yield @config_instance
       yml_files = [@config_instance.yml_files].compact.flatten
       @configuration = Hashie::Mash.new({:yml_files => yml_files,
-                                         :json_files => [@config_instance.json_files].compact.flatten,
                                          :remote_chef_dir => (@config_instance.remote_chef_dir || '/var/chef'),
                                          :roles_path => [@config_instance.roles_path].compact.flatten,
                                          :spec_path => [@config_instance.spec_path].compact.flatten,
