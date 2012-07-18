@@ -164,7 +164,7 @@ This assumes that 'demo.sharespost.com' is specified in the :servers section of 
 
 ### Run chef-solo on a single box:
 
-The simplest usage of Remy (Note: this only works if the Remy.configuration has already been specified, such as within
+The simplest usage of Remy (Note: this only works if the Remy::Configuration::Chef.configuration has already been specified, such as within
 a Rails application):
 
 `Remy::Chef.new(:ip_address => '123.123.123.123').run`
@@ -174,7 +174,7 @@ as an argument.
 
 Example: update your production database box:
 
-    server_config = Remy.find_server_config(:rails_env => :production, :role => :db)
+    server_config = Remy::Configuration::Chef.find_server_config(:rails_env => :production, :role => :db)
     Remy::Chef.new(server_config).run
 
 Other arguments can be passed into chef and will get applied against this node:
@@ -193,7 +193,7 @@ which will make chef-solo run in debug mode.
 
 From within your Capistrano file, you do a variety of things, such as the following:
 
-    Remy.servers.find_servers(:rails_env => :staging, :role => :app) do |server|
+    Remy::Configuration::Chef.servers.find_servers(:rails_env => :staging, :role => :app) do |server|
         Remy::Chef.new(server).run
     end
 

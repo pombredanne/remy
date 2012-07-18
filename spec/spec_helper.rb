@@ -14,3 +14,7 @@ RSpec.configure do |config|
 end
 
 IP_ADDRESS_OF_REMY_TEST = '108.166.98.115'
+
+def chef_fixture(file)
+  File.join(File.dirname(__FILE__), 'fixtures/' + file)
+end

@@ -10,9 +10,9 @@ module Remy
       options = JSON.parse(options).symbolize_keys! if options.is_a?(String)
       @chef_args = options.delete(:chef_args)
       @quiet = options.delete(:quiet)
-      @node_configuration = Remy.configuration.dup
+      @node_configuration = Remy::Configuration::Chef.configuration.dup
       @ip_address = options[:ip_address] ? options[:ip_address] : @node_configuration.ip_address
-      server_config = Remy.find_server_config(:ip_address => ip_address) || Hashie::Mash.new
+      server_config = Remy::Configuration::Chef.find_server_config(:ip_address => ip_address) || Hashie::Mash.new
       @node_configuration.deep_merge!(server_config)
       @node_configuration.merge!(options)
     end
@@ -24,7 +24,7 @@ module Remy
     end
 
     def self.rake_run(rake_options)
-      ip_addresses = Remy.determine_ip_addresses_for_remy_run(rake_options)
+      ip_addresses = Remy::Configuration::Chef.determine_ip_addresses_for_remy_run(rake_options)
       ip_addresses.each do |ip_address|
         Remy::Chef.new(:ip_address => ip_address).run
       end
