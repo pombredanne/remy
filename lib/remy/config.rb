@@ -22,22 +22,22 @@
 #++
 
 module Remy
-  module Configuration
-    def configuration
-      @configuration ? @configuration : Hashie::Mash.new
+  module Config
+    def config
+      @config ? @config : Hashie::Mash.new
     end
 
     def to_json
-      configuration.to_json
+      config.to_json
     end
 
     def servers
-      configuration.servers
+      config.servers
     end
 
     def find_servers(options = {})
-      return nil unless configuration.servers
-      Hashie::Mash.new(configuration.servers.inject({}) do |hash, (server_name, server_config)|
+      return nil unless config.servers
+      Hashie::Mash.new(config.servers.inject({}) do |hash, (server_name, server_config)|
         found = options.all? { |(key, value)| server_config[key] == value }
         hash[server_name] = server_config if found
         hash
@@ -45,8 +45,8 @@ module Remy
     end
 
     def find_server(options = {})
-      return nil unless configuration.servers
-      server_name, server_config = configuration.servers.detect do |(server_name, server_config)|
+      return nil unless config.servers
+      server_name, server_config = config.servers.detect do |(server_name, server_config)|
         options.all? { |(key, value)| server_config[key] == value }
       end
       {server_name => server_config.nil? ? nil : server_config.dup}
@@ -57,16 +57,16 @@ module Remy
     end
 
     def find_server_config_by_name(name)
-      return nil unless configuration.servers
-      configuration.servers.find { |(server_name, _)| server_name == name }.try(:last)
+      return nil unless config.servers
+      config.servers.find { |(server_name, _)| server_name == name }.try(:last)
     end
 
-    def cloud_configuration
-      configuration && configuration.cloud_configuration
+    def cloud_config
+      config && config.cloud_config
     end
 
     def bootstrap
-      configuration && configuration.bootstrap
+      config && config.bootstrap
     end
 
     def determine_ip_addresses_for_remy_run(rake_args)
@@ -89,7 +89,7 @@ module Remy
             ip_addresses << server_config.ip_address
           end
         end
-        ip_addresses << configuration.ip_address
+        ip_addresses << config.ip_address
       end
       ip_addresses.compact
     end

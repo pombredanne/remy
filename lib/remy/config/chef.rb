@@ -22,9 +22,9 @@
 #++
 
 module Remy
-  module Configuration
+  module Config
     class Chef
-      extend Remy::Configuration
+      extend Remy::Config
       include ::Remy::Shell
       include FileUtils
 
@@ -32,7 +32,7 @@ module Remy
         temp_config = Hashie::Mash.new(:node_attributes => {}, :yml_files => [], :remote_chef_dir => '/var/chef')
         yield temp_config
         yml_files = [temp_config.yml_files].compact.flatten
-        @configuration = Hashie::Mash.new({:yml_files => yml_files,
+        @config = Hashie::Mash.new({:yml_files => yml_files,
                                            :remote_chef_dir => temp_config.remote_chef_dir,
                                            :roles_path => [temp_config.roles_path].compact.flatten,
                                            :spec_path => [temp_config.spec_path].compact.flatten,
@@ -40,7 +40,7 @@ module Remy
 
         yml_files.each do |filename|
           begin
-            @configuration.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
+            @config.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
           rescue SystemCallError, IOError
             # do nothing if the chef.yml file could not be read (it's not needed for every usage of remy, just certain ones)
           end

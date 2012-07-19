@@ -15,19 +15,19 @@ describe Remy::Bootstrap do
 
   describe "ruby_version" do
     it 'should default to 1.8.7 if there is no Ruby version specified in the yml files' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
       bootstrap = Remy::Bootstrap.new
       ruby_version(bootstrap).should == '1.8.7'
     end
 
     it 'should get the Ruby version if specified in the yml files' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
       bootstrap = Remy::Bootstrap.new
       ruby_version(bootstrap).should == '1.9.2'
     end
 
     it 'should use the version passed in as an option, even if it exists in the yml files' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
       bootstrap = Remy::Bootstrap.new(:ruby_version => '1.9.1')
       ruby_version(bootstrap).should == '1.9.1'
     end
@@ -35,7 +35,7 @@ describe Remy::Bootstrap do
 
   describe "gems" do
     it 'should default to nil if not specified in the yml files' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
       bootstrap = Remy::Bootstrap.new
       gem(bootstrap)[:chef].should be_nil
       gem(bootstrap)[:bundler].should be_nil
@@ -43,7 +43,7 @@ describe Remy::Bootstrap do
     end
 
     it 'should get gem version if it has been specified in the yml files' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/chef.yml') }
       bootstrap = Remy::Bootstrap.new
       gem(bootstrap)[:chef].should == '10.12.0'
       gem(bootstrap)[:bundler].should == '3.0.0'
@@ -53,7 +53,7 @@ describe Remy::Bootstrap do
 
   describe "ip_address" do
     it 'should use the value from the options' do
-      Remy::Configuration::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
+      Remy::Config::Chef.configure { |config| config.yml_files = File.join(File.dirname(__FILE__), '../fixtures/hello_world_chef.yml') }
       bootstrap = Remy::Bootstrap.new(:ip_address => '1.2.3.4', :password => 'abcdef')
       ip_address(bootstrap).should == '1.2.3.4'
     end

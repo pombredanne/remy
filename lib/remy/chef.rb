@@ -10,11 +10,11 @@ module Remy
       options = JSON.parse(options).symbolize_keys! if options.is_a?(String)
       @chef_args = options.delete(:chef_args)
       @quiet = options.delete(:quiet)
-      @node_configuration = Remy::Configuration::Chef.configuration.dup
-      @ip_address = options[:ip_address] ? options[:ip_address] : @node_configuration.ip_address
-      server_config = Remy::Configuration::Chef.find_server_config(:ip_address => ip_address) || Hashie::Mash.new
-      @node_configuration.deep_merge!(server_config)
-      @node_configuration.merge!(options)
+      @node_config = Remy::Config::Chef.config.dup
+      @ip_address = options[:ip_address] ? options[:ip_address] : @node_config.ip_address
+      server_config = Remy::Config::Chef.find_server_config(:ip_address => ip_address) || Hashie::Mash.new
+      @node_config.deep_merge!(server_config)
+      @node_config.merge!(options)
     end
 
     def run
@@ -24,7 +24,7 @@ module Remy
     end
 
     def self.rake_run(rake_options)
-      ip_addresses = Remy::Configuration::Chef.determine_ip_addresses_for_remy_run(rake_options)
+      ip_addresses = Remy::Config::Chef.determine_ip_addresses_for_remy_run(rake_options)
       ip_addresses.each do |ip_address|
         Remy::Chef.new(:ip_address => ip_address).run
       end
@@ -37,7 +37,7 @@ module Remy
       copy_spec_cookbook_and_role_dirs_to_tmp_dir
       create_solo_rb
       create_bash_script_which_runs_chef
-      create_node_json_from_node_configuration
+      create_node_json_from_node_config
     end
 
     def rsync_temp_dir_with_cookbooks_to_remote_host
@@ -67,7 +67,7 @@ module Remy
     end
 
     def copy_spec_cookbook_and_role_dirs_to_tmp_dir
-      flatten_paths(@node_configuration.roles_path, @node_configuration.cookbook_path, @node_configuration.spec_path).each do |a_path|
+      flatten_paths(@node_config.roles_path, @node_config.cookbook_path, @node_config.spec_path).each do |a_path|
         cp_r a_path, tmp_dir
       end
     end
@@ -98,9 +98,9 @@ EOF
       chmod(0755, File.join(tmp_dir, run_chef_solo_bash_script))
     end
 
-    def create_node_json_from_node_configuration
+    def create_node_json_from_node_config
       File.open(File.join(tmp_dir, node_json), 'w+') do |f|
-        f << @node_configuration.to_json
+        f << @node_config.to_json
       end
     end
 
@@ -113,7 +113,7 @@ EOF
     end
 
     def remote_chef_dir
-      @node_configuration.remote_chef_dir
+      @node_config.remote_chef_dir
     end
 
     def tmp_dir

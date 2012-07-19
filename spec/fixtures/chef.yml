@@ -27,7 +27,7 @@ servers:
     rails_env: demo
     color: green
 
-cloud_configuration:
+cloud_config:
   cloud_provider: Rackspace
   cloud_username: sharespost
   cloud_api_key: abcdefg12345

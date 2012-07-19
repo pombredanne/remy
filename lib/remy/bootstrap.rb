@@ -7,7 +7,7 @@ module Remy
     def initialize(options = { })
       @ip_address = options[:ip_address]
       @password = options[:password]
-      options = (Remy::Configuration::Chef.bootstrap || {}).merge(options).symbolize_keys
+      options = (Remy::Config::Chef.bootstrap || {}).merge(options).symbolize_keys
       @ruby_version = options[:ruby_version] || '1.8.7'
       @gems = options[:gems] || {}
       @quiet = options[:quiet] || false
