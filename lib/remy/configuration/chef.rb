@@ -33,6 +33,7 @@ module Remy
     end
 
     class Chef
+      extend Remy::Configuration
       include ::Remy::Shell
       include FileUtils
 
@@ -52,90 +53,6 @@ module Remy
           rescue SystemCallError, IOError
             # do nothing if the chef.yml file could not be read (it's not needed for every usage of remy, just certain ones)
           end
-        end
-      end
-
-      def self.configuration
-        @configuration ? @configuration : Hashie::Mash.new
-      end
-
-      def self.to_json
-        configuration.to_json
-      end
-
-      def self.servers
-        configuration.servers
-      end
-
-      def self.find_servers(options = {})
-        return nil unless configuration.servers
-        Hashie::Mash.new(configuration.servers.inject({}) do |hash, (server_name, server_config)|
-          found = options.all? { |(key, value)| server_config[key] == value }
-          hash[server_name] = server_config if found
-          hash
-        end)
-      end
-
-      def self.find_server(options = {})
-        return nil unless configuration.servers
-        server_name, server_config = configuration.servers.detect do |(server_name, server_config)|
-          options.all? { |(key, value)| server_config[key] == value }
-        end
-        {server_name => server_config.nil? ? nil : server_config.dup}
-      end
-
-      def self.find_server_config(options = {})
-        find_server(options).try(:values).try(:first)
-      end
-
-      def self.find_server_config_by_name(name)
-        return nil unless configuration.servers
-        configuration.servers.find { |(server_name, _)| server_name == name }.try(:last)
-      end
-
-      def self.cloud_configuration
-        configuration && configuration.cloud_configuration
-      end
-
-      def self.bootstrap
-        configuration && configuration.bootstrap
-      end
-
-      def self.determine_ip_addresses_for_remy_run(rake_args)
-        ip_addresses = []
-        if options_hash = convert_properties_to_hash(rake_args)
-          servers = find_servers(options_hash)
-          if !servers.empty?
-            ip_addresses = servers.collect { |server_name, chef_option| chef_option.ip_address }
-          else
-            ip_addresses = [options_hash[:ip_address]]
-          end
-        else
-          names_or_ip_addresses = rake_args.present? ? rake_args.split(' ').collect { |name| name.strip } : []
-          names_or_ip_addresses.each do |name_or_ip_address|
-            # From: http://www.regular-expressions.info/examples.html
-            ip_address_regex = '\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
-            if name_or_ip_address.match(ip_address_regex)
-              ip_addresses << name_or_ip_address
-            elsif server_config = find_server_config_by_name(name_or_ip_address)
-              ip_addresses << server_config.ip_address
-            end
-          end
-          ip_addresses << configuration.ip_address
-        end
-        ip_addresses.compact
-      end
-
-      # Converts "foo:bar baz:blech" to {:foo => 'bar', :baz => 'blech'}
-      def self.convert_properties_to_hash(properties)
-        if properties =~ /:/
-          properties.split(' ').inject({}) do |result, pair|
-            key, value = pair.split(':')
-            result[key] = value
-            result
-          end.symbolize_keys
-        else
-          nil
         end
       end
     end

@@ -21,7 +21,6 @@ describe Remy::Configuration::Chef do
       end
     end
 
-
     describe "yml files" do
       it 'should combine multiple yaml files into a mash' do
         Remy::Configuration::Chef.configure { |config| config.yml_files = [chef_fixture('foo.yml'), chef_fixture('bar.yml')] }
