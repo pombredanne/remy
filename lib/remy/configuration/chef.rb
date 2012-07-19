@@ -23,26 +23,17 @@
 
 module Remy
   module Configuration
-    class TempConfig
-      attr_accessor :yml_files, :cookbook_path, :spec_path, :remote_chef_dir, :node_attributes, :roles_path
-
-      def initialize
-        @yml_files = []
-        @node_attributes = {}
-      end
-    end
-
     class Chef
       extend Remy::Configuration
       include ::Remy::Shell
       include FileUtils
 
       def self.configure
-        temp_config = TempConfig.new
+        temp_config = Hashie::Mash.new(:node_attributes => {}, :yml_files => [], :remote_chef_dir => '/var/chef')
         yield temp_config
         yml_files = [temp_config.yml_files].compact.flatten
         @configuration = Hashie::Mash.new({:yml_files => yml_files,
-                                           :remote_chef_dir => (temp_config.remote_chef_dir || '/var/chef'),
+                                           :remote_chef_dir => temp_config.remote_chef_dir,
                                            :roles_path => [temp_config.roles_path].compact.flatten,
                                            :spec_path => [temp_config.spec_path].compact.flatten,
                                            :cookbook_path => [temp_config.cookbook_path].compact.flatten}.merge!(temp_config.node_attributes))
