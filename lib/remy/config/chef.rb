@@ -46,6 +46,11 @@ module Remy
           end
         end
       end
+
+      def self.save_node_json(output_file_path)
+        FileUtils.mkdir_p File.dirname(output_file_path)
+        File.open(output_file_path, 'w') { |f| f << @config.to_json }
+      end
     end
   end
 end
