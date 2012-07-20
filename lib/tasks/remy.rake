@@ -8,6 +8,12 @@ namespace :remy do
     end
   end
 
+  desc 'Create a JSON file from the contents of the Chef yml config files for use on development boxes by the Rails application.'
+  task :save_node_json, :rake_args do |task, options|
+    Rake::Task[:'remy:environment'].invoke
+    Remy::Config::Chef.save_node_json(options[:rake_args])
+  end
+
   desc 'ssh to a named box'
   task :ssh, :rake_args do |task, options|
     Rake::Task[:'remy:environment'].invoke
