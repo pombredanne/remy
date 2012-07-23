@@ -39,11 +39,7 @@ module Remy
                                            :cookbook_path => [temp_config.cookbook_path].compact.flatten}.merge!(temp_config.node_attributes))
 
         yml_files.each do |filename|
-          begin
-            @config.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
-          rescue SystemCallError, IOError
-            # do nothing if the chef.yml file could not be read (it's not needed for every usage of remy, just certain ones)
-          end
+          @config.deep_merge!(YAML.load(ERB.new(File.read(filename)).result) || {})
         end
       end
 

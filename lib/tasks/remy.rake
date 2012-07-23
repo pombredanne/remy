@@ -34,11 +34,8 @@ namespace :remy do
 
     desc 'create a server and bootstrap chef'
     task :create_and_bootstrap, :server_name, :flavor_id, :cloud_api_key, :cloud_username, :cloud_provider, :image_id do |task, options|
-      begin
-        result = Remy::Server.new({:raise_exception => true}.merge(options)).create
-        Rake::Task[:'remy:server:bootstrap'].invoke(result[:ip_address], result[:password])
-      rescue Exception => e
-      end
+      result = Remy::Server.new({:raise_exception => true}.merge(options)).create
+      Rake::Task[:'remy:server:bootstrap'].invoke(result[:ip_address], result[:password])
     end
   end
 end

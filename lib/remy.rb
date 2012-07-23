@@ -44,14 +44,3 @@ require 'remy/utility'
 require 'yaml'
 dir = File.dirname(__FILE__)
 Dir[File.join(dir, 'remy', '**', '*.rb')].each {|f| require f.gsub(dir, '')[1, f.length] }
-
-module Remy
-  begin
-    class Railtie < ::Rails::Railtie
-      rake_tasks do
-        load 'tasks/remy.rake'
-      end
-    end
-  rescue LoadError, NameError
-  end
-end

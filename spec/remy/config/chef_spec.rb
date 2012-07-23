@@ -56,11 +56,6 @@ describe Remy::Config::Chef do
         subject.config.yml_files.should == []
       end
 
-      it 'should not raise an error if there is a file does does not exist' do
-        expect do
-          subject.configure { |config| config.yml_files = ['does_not_exist.yml'] }
-        end.should_not raise_error
-      end
     end
     describe 'json config files' do
       before do
