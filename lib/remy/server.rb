@@ -4,7 +4,7 @@ class Remy::Server
   def initialize(options = {})
     options = {
       :flavor_id => 4, # 2GB
-      :image_id => 49, # Ubuntu 10.04 LTS (lucid)
+      :image_id => 125, # Ubuntu 12.04 LTS (precise pangolin) [image_id = 49 is Ubuntu 10.04 LTS (lucid)]
       :quiet => false
     }.merge(Remy::Config::Chef.cloud_config || {}).merge(options || {}).symbolize_keys
 
