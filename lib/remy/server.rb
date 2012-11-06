@@ -3,7 +3,7 @@ class Remy::Server
 
   def initialize(options = {})
     options = {
-      :flavor_id => 4, # 2GB
+      :flavor_id => 4, # 2GB http://vertis.github.com/2011/04/02/list-of-rackspace-flavors-and-images.html
       :image_id => 125, # Ubuntu 12.04 LTS (precise pangolin) [image_id = 49 is Ubuntu 10.04 LTS (lucid)]
       :quiet => false
     }.merge(Remy::Config::Chef.cloud_config || {}).merge(options || {}).symbolize_keys

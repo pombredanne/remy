@@ -61,9 +61,9 @@ module Remy
       raise "ssh-copy-id is not installed locally! On the Mac, do 'brew install ssh-copy-id'" unless is_ssh_copy_id_installed_locally?
       is_ssh_key_in_local_known_hosts_file = `grep "#{ip_address}" ~/.ssh/known_hosts`.length > 0
       if is_ssh_key_in_local_known_hosts_file
-        execute %Q{expect -c 'spawn ssh-copy-id #{user}@#{ip_address}; expect assword ; send "#{password}\\n" ; interact'}
+        execute %Q{expect -c 'spawn ssh-copy-id -i /Users/sharespost/.ssh/id_dsa.pub #{user}@#{ip_address}; expect assword ; send "#{password}\\n" ; interact'}
       else
-        execute %Q{expect -c 'spawn ssh-copy-id #{user}@#{ip_address}; expect continue; send "yes\\n"; expect assword ; send "#{password}\\n" ; interact'}
+        execute %Q{expect -c 'spawn ssh-copy-id -i /Users/sharespost/.ssh/id_dsa.pub #{user}@#{ip_address}; expect continue; send "yes\\n"; expect assword ; send "#{password}\\n" ; interact'}
       end
     end
 
