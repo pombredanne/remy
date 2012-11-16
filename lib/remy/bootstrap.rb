@@ -16,6 +16,7 @@ module Remy
 
     def run
       copy_ssh_key_to_remote
+      add_ssh_key_locally_if_necessary
       update_linux_distribution
       install_rvm
       install_gems_to_bootstrap_chef
@@ -26,6 +27,13 @@ module Remy
     def apt_get_rvm_packages
       # This list of required packages came from doing "rvm requirements"
       remote_apt_get 'build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion'
+    end
+
+    def add_ssh_key_locally_if_necessary
+      private_ssh_key = public_ssh_key.chomp(File.extname(public_ssh_key))
+      unless `ssh-add -l`.match(/#{File.basename(private_ssh_key)}/)
+        `ssh-add $HOME/.ssh/#{private_ssh_key}`
+      end
     end
 
     def install_gems_to_bootstrap_chef
